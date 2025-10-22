@@ -77,9 +77,8 @@ class Driver_Map(Enum):  # noqa
             'OurSQL': 'mysql+oursql',
             'aiomysql': 'mysql+aiomysql',
             'connector': 'mysql+mysqlconnector',
-            'mysqldb': 'mysql+mysqldb',
             'pymysql': 'mysql+pymysql',
-            'mysql': 'mysql',
+            'mysql': 'mysql+mysqlconnector',
         },
     )
     PostgreSQL = (
@@ -102,7 +101,7 @@ class Driver_Map(Enum):  # noqa
     monetdb = ({'monetdb': 'monetdb', 'lite': 'monetdb+lite'},)
 
 
-def connect_str(key: str, odbc: str | None = None) -> str:
+def connect_str(key: str = 'default', odbc: str | None = None) -> str:
     """生成数据库连接字符串的工具函数
 
     Args:
@@ -130,7 +129,8 @@ def connect_str(key: str, odbc: str | None = None) -> str:
     if not hasattr(DB_CFG, key):
         raise ValueError(f'错误提示:检查数据库配置:{key}')
 
-    cfg = DB_CFG[key].value
+    # 从枚举中获取配置字典（枚举值是包含字典的元组，需要取第一个元素）
+    cfg = DB_CFG[key].value[0]
     db_types = cfg['type']
     odbc = db_types if odbc is None else odbc
 
@@ -140,9 +140,9 @@ def connect_str(key: str, odbc: str | None = None) -> str:
     except KeyError as e:
         raise KeyError(f'配置中缺少必要字段: {e}') from e
 
-    # 获取驱动字符串
+    # 获取驱动字符串（枚举值是包含字典的元组，需要取第一个元素）
     try:
-        tmp_map = Driver_Map[db_types].value
+        tmp_map = Driver_Map[db_types].value[0]
         drivers_str = tmp_map.get(odbc, tmp_map.get(db_types))
     except KeyError as e:
         raise KeyError(f'不支持的数据库类型: {db_types}') from e
@@ -153,11 +153,11 @@ def connect_str(key: str, odbc: str | None = None) -> str:
 if __name__ == '__main__':
     """示例代码,展示connect_str函数的使用方式"""
     # 使用默认驱动
-    print(connect_str('TXbook'))
+    print(connect_str())
 
     # 指定特定驱动
-    connector2 = connect_str('TXbook', 'connector')
+    connector2 = connect_str('TXbook', 'pymysql')
     print(connector2)
 
     # 使用默认配置
-    print(connect_str('default'))
+    print(connect_str('default', odbc='aiomysql'))

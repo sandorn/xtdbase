@@ -6,8 +6,12 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "aiomysql>=0.2.0",
+    "cryptography>=44.0.0",
     "mysql-connector-python>=9.4.0",
+    "pandas>=2.3.3",
     "pymysql>=1.1.2",
+    "redis>=6.4.0",
+    "twisted>=25.5.0",
     "xtlog>=0.1.9",
     "xtwraps>=0.2.1",
 ]
