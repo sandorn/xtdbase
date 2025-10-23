@@ -19,10 +19,7 @@ Github       : https://github.com/sandorn/home
 
 from __future__ import annotations
 
-import json
 import re
-from datetime import datetime
-from enum import Enum
 from typing import Any
 
 
@@ -109,10 +106,7 @@ def _sanitize_identifier(identifier: str) -> str:
     Returns:
         str: 处理后的安全标识符
     """
-    # 保留中文字符和基本字符，移除潜在的SQL注入风险字符
-    import re
-
-    # 允许字母、数字、下划线和中文字符，移除SQL特殊字符
+    # 保留中文字符和基本字符，移除潜在的SQL注入风险字符；允许字母、数字、下划线和中文字符，移除SQL特殊字符
     return re.sub(r'[;"\'\(\)\[\]\{\}\|\\<>&^\-\+\*/%=\?\,\.\s]', '', str(identifier))
 
 

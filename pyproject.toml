@@ -1,36 +1,68 @@
 [project]
 name = "xtdbase"
 version = "0.1.0"
-description = "Add your description here"
+description = "扩展数据库与数据处理工具库 - 提供Excel操作、MySQL连接池、Redis客户端等统一接口"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
+authors = [
+    {name = "sandorn", email = "sandorn@live.cn"}
+]
+license = "MIT"
 dependencies = [
-    "aiomysql>=0.2.0",
-    "cryptography>=44.0.0",
-    "mysql-connector-python>=9.4.0",
+    "numpy>=2.3.4",
+    "openpyxl>=3.1.5",
     "pandas>=2.3.3",
-    "pymysql>=1.1.2",
-    "redis>=6.4.0",
-    "twisted>=25.5.0",
+    "pydantic>=2.12.3",
     "xtlog>=0.1.9",
-    "xtwraps>=0.2.1",
 ]
 
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Utilities",
+    "Topic :: Database",
+    "Topic :: Office/Business",
+    "Operating System :: OS Independent",
 ]
+
+[project.optional-dependencies]
+# MySQL 支持
+mysql = [
+    "aiomysql>=0.2.0",
+    "pymysql>=1.1.2",
+    "sqlalchemy>=2.0.0",  # aiomysql.sa 需要
+]
+# Redis 支持
+redis = [
+    "redis>=6.4.0",
+]
+# 加密支持
+crypto = [
+    "cryptography>=44.0.0",
+]
+# 完整安装（包含所有可选依赖）
+all = [
+    "aiomysql>=0.2.0",
+    "pymysql>=1.1.2",
+    "sqlalchemy>=2.0.0",
+    "redis>=6.4.0",
+    "cryptography>=44.0.0",
+]
+# 测试依赖
+test = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+]
+
+
 [project.urls]
 homepage = "https://github.com/sandorn/xtdbase"
 repository = "https://github.com/sandorn/xtdbase"
 documentation = "https://github.com/sandorn/xtdbase/wiki"
-
-[project.optional-dependencies]
-test = []
+issues = "https://github.com/sandorn/xtdbase/issues"
 
 [build-system]
 requires = ["setuptools>=61.0"]

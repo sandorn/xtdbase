@@ -1,0 +1,21 @@
+# Include the license file
+include LICENSE
+
+# Include the README
+include README.md
+include CHANGELOG.md
+
+# Include pyproject.toml
+include pyproject.toml
+
+# Include examples
+recursive-include examples *.py
+recursive-include examples README*.md
+
+# Exclude unnecessary files
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude *.egg-info
+
