@@ -58,7 +58,7 @@ import aiomysql
 import pymysql
 from xtlog import mylog
 
-from xtdbase.cfg import DB_CFG
+from .cfg import DB_CFG
 
 
 class Singleton:

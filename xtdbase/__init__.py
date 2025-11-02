@@ -118,7 +118,7 @@ except ImportError:
 # SQL 工具函数 (可选依赖)
 # ==============================================
 try:
-    from .untilsql import make_insert_sql, make_update_sql
+    from .sql_builder import make_insert_sql, make_update_sql
 
     __all__.extend(['make_insert_sql', 'make_update_sql'])
 except ImportError:

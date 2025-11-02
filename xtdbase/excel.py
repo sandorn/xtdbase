@@ -26,7 +26,6 @@ Github       : https://github.com/sandorn/xtdbase
 
 from __future__ import annotations
 
-import os
 from collections.abc import Iterator
 from pathlib import Path
 from typing import IO, Any, cast
@@ -80,9 +79,9 @@ def rename_file(file_path: str) -> str:
     Returns:
         str: 添加后缀后的文件路径
     """
-    file_dir, file_name = os.path.split(file_path)
-    base_name, extension = os.path.splitext(file_name)
-    return os.path.join(file_dir, f'{base_name}-excel{extension}')
+    p = Path(file_path)
+    new_name = f'{p.stem}-excel{p.suffix}'
+    return str(p.with_name(new_name))
 
 
 # ============= Excel统一操作类 =============
@@ -147,14 +146,14 @@ class Excel:
         logger.info(f'初始化Excel,文件路径: {self.file}')
 
         # 如果文件不存在,创建新文件
-        if not os.path.exists(self.file):
+        if not Path(self.file).exists():
             logger.info(f'文件不存在,创建新文件: {self.file}')
 
             # 确保目录存在
-            file_dir = os.path.dirname(self.file)
-            if file_dir and not os.path.exists(file_dir):
+            file_dir = Path(self.file).parent
+            if file_dir and not file_dir.exists():
                 try:
-                    os.makedirs(file_dir, exist_ok=True)
+                    Path(file_dir).mkdir(exist_ok=True, parents=True)
                     logger.info(f'创建目录: {file_dir}')
                 except OSError as e:
                     logger.error(f'创建目录失败: {e}')
@@ -749,7 +748,7 @@ class Excel:
 
             # 预先验证文件列表
             if validate_files:
-                valid_files = [f for f in input_files if os.path.exists(f)]
+                valid_files = [f for f in input_files if Path(f).exists()]
                 invalid_count = len(input_files) - len(valid_files)
                 if invalid_count > 0:
                     logger.warning(f'跳过 {invalid_count} 个不存在的文件')
@@ -762,7 +761,7 @@ class Excel:
                 for file in valid_files:
                     try:
                         df = pandas.read_excel(file)
-                        file_name = os.path.basename(file)
+                        file_name = Path(file).name
                         sheet_name = sheet_dict.get(file_name, file_name)
                         df.to_excel(writer, sheet_name=sheet_name, index=False)
                         logger.info(f'成功合并文件[{file}]到工作表[{sheet_name}]')

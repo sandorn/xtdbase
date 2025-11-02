@@ -244,7 +244,9 @@ def example_7_mixed_mode():
 def main():
     """运行所有示例"""
     # 确保输出目录存在
-    os.makedirs('test_output', exist_ok=True)
+    from pathlib import Path
+
+    Path('test_output').mkdir(exist_ok=True, parents=True)
 
     print('=' * 60)
     print('Excel统一操作类示例')
