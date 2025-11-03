@@ -28,7 +28,7 @@ from __future__ import annotations
 from enum import Enum
 
 
-class DB_CFG(Enum):  # noqa
+class DB_CFG(Enum):
     """数据库配置枚举类，集中管理所有数据库连接配置"""
 
     TXbook = (
