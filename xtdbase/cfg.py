@@ -28,7 +28,7 @@ from __future__ import annotations
 from enum import Enum
 
 
-class DB_CFG(Enum):  # noqa
+class DB_CFG(Enum):
     """数据库配置枚举类，集中管理所有数据库连接配置"""
 
     TXbook = (
@@ -127,7 +127,8 @@ def connect_str(key: str = 'default', odbc: str | None = None) -> str:
         >>> # 返回: mysql://sandorn:123456@localhost:3306/bxflb?charset=utf8mb4
     """
     if not hasattr(DB_CFG, key):
-        raise ValueError(f'错误提示:检查数据库配置:{key}')
+        msg = f'错误提示:检查数据库配置:{key}'
+        raise ValueError(msg)
 
     # 从枚举中获取配置字典（枚举值是包含字典的元组，需要取第一个元素）
     cfg = DB_CFG[key].value[0]
@@ -138,14 +139,16 @@ def connect_str(key: str = 'default', odbc: str | None = None) -> str:
     try:
         link_str = f'{cfg["user"]}:{cfg["password"]}@{cfg["host"]}:{cfg["port"]}/{cfg["db"]}?charset={cfg["charset"]}'
     except KeyError as e:
-        raise KeyError(f'配置中缺少必要字段: {e}') from e
+        msg = f'配置中缺少必要字段: {e}'
+        raise KeyError(msg) from e
 
     # 获取驱动字符串（枚举值是包含字典的元组，需要取第一个元素）
     try:
         tmp_map = Driver_Map[db_types].value[0]
         drivers_str = tmp_map.get(odbc, tmp_map.get(db_types))
     except KeyError as e:
-        raise KeyError(f'不支持的数据库类型: {db_types}') from e
+        msg = f'不支持的数据库类型: {db_types}'
+        raise KeyError(msg) from e
 
     return f'{drivers_str}://{link_str}'
 

@@ -1,5 +1,5 @@
 # !/usr/bin/env python
-"""AioMySQLPool 简单使用示例.
+"""MySQLPool 简单使用示例.
 
 演示如何使用异步MySQL连接池进行基本的数据库操作。
 """
@@ -10,7 +10,7 @@ import asyncio
 
 from xtlog import mylog as logger
 
-from xtdbase.aiomysqlpool import create_async_mysql_pool
+from xtdbase.mysqlpool import create_mysql_pool
 
 
 async def basic_query_example():
@@ -19,7 +19,7 @@ async def basic_query_example():
     logger.info('【示例1】基本查询操作')
     logger.info('=' * 60)
 
-    async with create_async_mysql_pool('default') as db:
+    async with create_mysql_pool('default') as db:
         # 查询单条记录
         user = await db.fetchone('SELECT * FROM users2 WHERE ID = %s', 143)
         if user:
@@ -36,7 +36,7 @@ async def insert_update_example():
     logger.info('【示例2】插入和更新数据')
     logger.info('=' * 60)
 
-    async with create_async_mysql_pool('default') as db:
+    async with create_mysql_pool('default') as db:
         # 插入数据
         new_id = await db.execute('INSERT INTO users2(username, password, 手机) VALUES (%s, %s, %s)', 'example_user', 'password123', '13800138000')
         logger.success(f'插入成功, 新ID: {new_id}')
@@ -56,7 +56,7 @@ async def transaction_example():
     logger.info('【示例3】事务操作')
     logger.info('=' * 60)
 
-    async with create_async_mysql_pool('default') as db:
+    async with create_mysql_pool('default') as db:
         conn = await db.begin()
         try:
             cur = await conn.cursor()
@@ -88,7 +88,7 @@ async def iterator_example():
     logger.info('【示例4】异步迭代器 - 大数据处理')
     logger.info('=' * 60)
 
-    async with create_async_mysql_pool('default') as db:
+    async with create_mysql_pool('default') as db:
         count = 0
         # 使用迭代器逐行处理，适合大量数据
         async for row in db.iterate('SELECT * FROM users2 ORDER BY ID', batch_size=10):
@@ -116,7 +116,6 @@ async def main():
         logger.info('\n' + '=' * 60)
         logger.success('✅ 所有示例执行完成!')
         logger.info('=' * 60)
-        logger.info('\n💡 更多详细测试请运行: python examples/test_aiomysqlpool.py')
 
     except Exception as e:
         logger.error(f'\n❌ 示例执行失败: {e}')

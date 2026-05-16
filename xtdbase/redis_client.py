@@ -299,22 +299,3 @@ def create_redis_client(db_key: str = 'redis', async_client: bool = False, max_c
     except Exception as err:
         logger.error(f'❌ 创建Redis客户端失败: {err!s}')
         raise Exception(f'❌ Redis客户端创建失败: {err!s}') from err
-
-
-if __name__ == '__main__':
-    """
-    简单使用示例
-    
-    更多详细的测试示例请参考: examples/test_redis_client.py
-    """
-    try:
-        # 同步客户端简单示例
-        redis = create_redis_client()
-        redis.set('demo_key', 'demo_value')
-        value = redis.get('demo_key')
-        logger.success(f'同步客户端测试: {value}')
-        redis.close()
-
-        logger.info('更多示例请运行: python examples/test_redis_client.py')
-    except Exception as e:
-        logger.error(f'❌ 示例运行失败: {e!s}')
